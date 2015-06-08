@@ -3,11 +3,13 @@ package appewtc.masterung.test6switch;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import ioio.lib.api.DigitalOutput;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.BaseIOIOLooper;
+import ioio.lib.util.IOIOLooper;
 import ioio.lib.util.android.IOIOActivity;
 
 public class MainActivity extends IOIOActivity {
@@ -43,15 +45,49 @@ public class MainActivity extends IOIOActivity {
 
         @Override
         protected void setup() throws ConnectionLostException, InterruptedException {
-            super.setup();
+            //super.setup();
+            oneDigitalOutput = ioio_.openDigitalOutput(1, false);
+            twoDigitalOutput = ioio_.openDigitalOutput(2, false);
+            threeDigitalOutput = ioio_.openDigitalOutput(3, false);
+            fourDigitalOutput = ioio_.openDigitalOutput(4,false);
+            fiveDigitalOutput = ioio_.openDigitalOutput(5, false);
+            sixDigitalOutput = ioio_.openDigitalOutput(6, false);
+
+            //Check Connected
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this, "Connected IOIO Board OK", Toast.LENGTH_SHORT).show();
+                }   //event
+            });
+
         }   // setup
 
         @Override
         public void loop() throws ConnectionLostException, InterruptedException {
-            super.loop();
+            //super.loop();
+            oneDigitalOutput.write(oneToggleButton.isChecked());
+            twoDigitalOutput.write(twoToggleButton.isChecked());
+            threeDigitalOutput.write(threeToggleButton.isChecked());
+            fourDigitalOutput.write(fourToggleButton.isChecked());
+            fiveDigitalOutput.write(fiveToggleButton.isChecked());
+            sixDigitalOutput.write(sixToggleButton.isChecked());
+
+            //Cannot Connected Board
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }   //loop
-        
+
     }   // Looper Class
+
+    protected IOIOLooper createIOIOLooper() {
+
+        return new Looper();
+    }   // createIOIOLooper
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
